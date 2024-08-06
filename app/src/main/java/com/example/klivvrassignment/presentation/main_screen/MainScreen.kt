@@ -16,7 +16,11 @@ import com.example.klivvrassignment.presentation.main_screen.components.CityItem
 import com.example.klivvrassignment.presentation.main_screen.components.SearchBar
 
 @Composable
-fun MainScreen(cityList: List<CityModel>, modifier: Modifier = Modifier) {
+fun MainScreen(
+    cityList: List<CityModel>,
+    onItemClicked: (CityModel) -> Unit,
+    modifier: Modifier = Modifier,
+) {
     LazyColumn(
         modifier = modifier
             .fillMaxSize()
@@ -27,7 +31,9 @@ fun MainScreen(cityList: List<CityModel>, modifier: Modifier = Modifier) {
             SearchBar()
         }
         items(cityList) { city ->
-            CityItem(cityModel = city)
+            CityItem(cityModel = city,
+                onItemClick = { onItemClicked(city) }
+            )
         }
     }
 
@@ -57,6 +63,6 @@ private fun MainScreenPreview() {
     cities.add(thirdCity)
 
     MaterialTheme {
-        MainScreen(cityList = cities)
+        MainScreen(cityList = cities,{})
     }
 }

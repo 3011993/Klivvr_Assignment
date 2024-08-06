@@ -14,6 +14,6 @@ class CityRepositoryImpl : CityRepository {
             context.assets.open("cities.json").bufferedReader().use { it.readText() }
         val gson = Gson()
         val cityDtoList = gson.fromJson(jsonFileString, Array<CityDto>::class.java).toList()
-        return cityDtoList.map { it.toCityModel() }
+        return cityDtoList.map { it.toCityModel() }.sortedWith(compareBy({it.city},{it.country}))
     }
 }

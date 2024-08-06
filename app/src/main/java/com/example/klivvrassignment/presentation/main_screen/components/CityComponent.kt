@@ -1,6 +1,7 @@
 package com.example.klivvrassignment.presentation.main_screen.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -16,12 +17,14 @@ import com.example.klivvrassignment.domain.model.Location
 import com.example.klivvrassignment.ui.theme.KlivvrAssignmentTheme
 
 @Composable
-fun CityItem(cityModel: CityModel, modifier: Modifier = Modifier) {
+fun CityItem(cityModel: CityModel, onItemClick: () -> Unit, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.background)
-            .padding(2.dp)
+            .padding(2.dp).clickable {
+                onItemClick()
+            }
     ) {
         Text(
             text = "${cityModel.city},${cityModel.country}",
@@ -46,9 +49,10 @@ fun CityItemPreview() {
                 "Au", "Sydney",
                 id = 0,
                 location = Location(
-                    999993.00 ,999032.00
+                    999993.00, 999032.00
                 )
             )
+            ,{}
         )
 
     }
