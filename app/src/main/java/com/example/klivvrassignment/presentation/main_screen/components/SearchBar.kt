@@ -19,11 +19,13 @@ import com.example.klivvrassignment.ui.theme.KlivvrAssignmentTheme
 
 @Composable
 fun SearchBar(
-    modifier: Modifier = Modifier
+    searchText: String,
+    onSearchTextChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     TextField(
-        value = "",
-        onValueChange = {},
+        value = searchText,
+        onValueChange = onSearchTextChange,
         leadingIcon = {
             Icon(
                 imageVector = Icons.Default.Search,
@@ -47,6 +49,6 @@ fun SearchBar(
 @Composable
 private fun SearchBarPreview() {
     KlivvrAssignmentTheme {
-        SearchBar()
+        //SearchBar()
     }
 }
