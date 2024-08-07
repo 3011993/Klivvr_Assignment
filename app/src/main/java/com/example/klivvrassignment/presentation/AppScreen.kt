@@ -36,7 +36,7 @@ fun AppScreen() {
                         navController.navigate(Screen.DisplayMapScreen.route) {
                             launchSingleTop = true
                         }
-                    })
+                    }, searchCities = viewModel::searchCities)
                 }
                 composable(
                     Screen.DisplayMapScreen.route

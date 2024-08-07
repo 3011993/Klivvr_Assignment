@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.klivvrassignment.common.Resources
+import com.example.klivvrassignment.data.Trie
 import com.example.klivvrassignment.domain.model.CityModel
 import com.example.klivvrassignment.domain.repo.CityRepository
 import com.example.klivvrassignment.presentation.UiState
@@ -23,6 +24,8 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(private val repo: CityRepository) : ViewModel() {
     private val _cityList = MutableStateFlow<UiState<List<CityModel>>>(UiState.Loading())
     val cityList = _cityList.asStateFlow()
+
+    private var trie: Trie? = null
 
     init {
         getCities()
@@ -44,9 +47,13 @@ class MainViewModel @Inject constructor(private val repo: CityRepository) : View
 
                     is Resources.Success -> {
                         _cityList.value = UiState.Success(data = result.data ?: emptyList())
+                        trie = Trie.preprocessCities(result.data?: emptyList())
                     }
                 }
             }
         }
+    }
+    fun searchCities(prefix: String): List<CityModel> {
+        return trie?.searchPrefix(prefix) ?: emptyList()
     }
 }

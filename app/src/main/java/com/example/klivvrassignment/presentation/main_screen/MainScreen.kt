@@ -23,7 +23,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.klivvrassignment.data.Trie
 import com.example.klivvrassignment.domain.model.CityModel
 import com.example.klivvrassignment.domain.model.Location
 import com.example.klivvrassignment.presentation.UiState
@@ -34,23 +33,22 @@ import com.example.klivvrassignment.presentation.main_screen.components.SearchBa
 fun MainScreen(
     cityList: UiState<List<CityModel>>,
     onItemClicked: (CityModel) -> Unit,
+    searchCities: (String) -> List<CityModel>,
     modifier: Modifier = Modifier,
 ) {
-    var trie by remember { mutableStateOf(Trie()) }
     var displayedCities by remember { mutableStateOf<List<CityModel>>(emptyList()) }
     var searchText by remember { mutableStateOf("") }
     LaunchedEffect(cityList) {
-        if (cityList is UiState.Success){
-            trie = Trie.preprocessCities(cityList.data)
+        if (cityList is UiState.Success) {
             displayedCities = cityList.data
         }
     }
     Scaffold { innerPadding ->
         Box(modifier = modifier.fillMaxSize()) {
-            when(cityList){
+            when (cityList) {
                 is UiState.Error -> {
                     Text(
-                        text = cityList.message?: "An unexpected error occurred",
+                        text = cityList.message ?: "An unexpected error occurred",
                         color = MaterialTheme.colorScheme.error,
                         textAlign = TextAlign.Center,
                         modifier = Modifier
@@ -60,9 +58,11 @@ fun MainScreen(
 
                     )
                 }
+
                 is UiState.Loading -> {
                     CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                 }
+
                 is UiState.Success -> {
                     LazyColumn(
                         modifier = modifier
@@ -80,7 +80,7 @@ fun MainScreen(
                                     displayedCities = if (newText.isBlank()) {
                                         cityList.data
                                     } else {
-                                        trie.searchPrefix(newText)
+                                        searchCities(newText)
                                     }
                                 }
                             )
@@ -121,6 +121,6 @@ private fun MainScreenPreview() {
     cities.add(thirdCity)
 
     MaterialTheme {
-        MainScreen(cityList = UiState.Success(cities), {})
+        //MainScreen(cityList = UiState.Success(cities), onItemClicked = {} , searchCities = { })
     }
 }
