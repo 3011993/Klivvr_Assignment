@@ -19,13 +19,23 @@ class Trie {
 
     fun searchPrefix(prefix: String): List<CityModel> {
         var current = root
+        val cities = mutableListOf<CityModel>()
         for (char in prefix.lowercase()) {
             if (!current.children.containsKey(char)) {
-                return emptyList()
+                break
             }
             current = current.children[char]!!
         }
-        return collectCities(current)
+        cities.addAll(collectCities(current))
+
+        if (prefix.isNotEmpty() && prefix[0].isUpperCase()) {
+            current = root
+            val initial = prefix[0].lowercaseChar()
+            if (current.children.containsKey(initial)) {
+                cities.addAll(collectCities(current.children[initial]!!))
+            }
+        }
+        return cities.distinct()
     }
 
     private fun collectCities(node: TrieNode): List<CityModel> {

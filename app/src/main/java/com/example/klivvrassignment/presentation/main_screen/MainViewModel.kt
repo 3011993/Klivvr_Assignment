@@ -1,23 +1,45 @@
 package com.example.klivvrassignment.presentation.main_screen
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.klivvrassignment.common.Resources
 import com.example.klivvrassignment.domain.model.CityModel
 import com.example.klivvrassignment.domain.repo.CityRepository
+import com.example.klivvrassignment.presentation.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(private val repo: CityRepository) : ViewModel() {
-    private val _cities = MutableStateFlow<List<CityModel>>(emptyList())
-    val cities = _cities.asStateFlow()
+    private val _cityList = MutableStateFlow<UiState<List<CityModel>>>(UiState.Loading())
+    val cityList = _cityList.asStateFlow()
 
     init {
         getCities()
     }
 
     private fun getCities() {
-        _cities.value = repo.getCities()
+        viewModelScope.launch(Dispatchers.IO) {
+            repo.getCities().collect { result ->
+                when (result) {
+                    is Resources.Error -> {
+                        _cityList.value = UiState.Error(message = result.message)
+                    }
+
+                    is Resources.Loading -> {
+                        _cityList.value = UiState.Loading()
+                    }
+
+                    is Resources.Success -> {
+                        _cityList.value = UiState.Success(data = result.data ?: emptyList())
+                    }
+                }
+            }
+        }
     }
 }

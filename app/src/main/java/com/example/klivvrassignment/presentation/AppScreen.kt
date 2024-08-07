@@ -5,8 +5,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -19,7 +19,6 @@ import com.example.klivvrassignment.ui.theme.KlivvrAssignmentTheme
 @Composable
 fun AppScreen() {
     KlivvrAssignmentTheme {
-
         Surface(color = MaterialTheme.colorScheme.background) {
             val navController = rememberNavController()
             NavHost(
@@ -28,13 +27,13 @@ fun AppScreen() {
             ) {
                 composable(Screen.CitiesScreen.route) {
                     val viewModel: MainViewModel = hiltViewModel()
-                    val cities by viewModel.cities.collectAsState()
-                    MainScreen(cityList = cities, onItemClicked = { city ->
+                    val cityList by viewModel.cityList.collectAsState()
+                    MainScreen(cityList = cityList, onItemClicked = { city ->
                         navController.currentBackStackEntry?.savedStateHandle?.set(
                             key = "city",
                             value = city
                         )
-                        navController.navigate(Screen.DisplayMapScreen.route){
+                        navController.navigate(Screen.DisplayMapScreen.route) {
                             launchSingleTop = true
                         }
                     })
@@ -51,6 +50,12 @@ fun AppScreen() {
             }
         }
     }
+}
 
-
+@Preview(showBackground = true)
+@Composable
+fun AppScreenPreview() {
+    KlivvrAssignmentTheme {
+        AppScreen()
+    }
 }
