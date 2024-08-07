@@ -23,7 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.klivvrassignment.data.node_trie.Trie
+import com.example.klivvrassignment.data.Trie
 import com.example.klivvrassignment.domain.model.CityModel
 import com.example.klivvrassignment.domain.model.Location
 import com.example.klivvrassignment.presentation.UiState
@@ -121,6 +121,6 @@ private fun MainScreenPreview() {
     cities.add(thirdCity)
 
     MaterialTheme {
-        //MainScreen(cityList = cities, {})
+        MainScreen(cityList = UiState.Success(cities), {})
     }
 }

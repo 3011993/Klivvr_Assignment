@@ -1,6 +1,15 @@
-package com.example.klivvrassignment.data.node_trie
+package com.example.klivvrassignment.data
 
 import com.example.klivvrassignment.domain.model.CityModel
+
+//I choose Trie because It's perfect match for our case
+//Trie is a prefix tree, meaning it efficiently stores and retrieves words based on their shared prefixes.
+//pros: Autocomplete suggestions, faster prefix searches and memory efficiency..etc
+class TrieNode {
+    val children : MutableMap<Char, TrieNode> = HashMap()
+    var isEndOfWord : Boolean = false
+    var city : CityModel? = null
+}
 
 class Trie {
     private val root = TrieNode()
