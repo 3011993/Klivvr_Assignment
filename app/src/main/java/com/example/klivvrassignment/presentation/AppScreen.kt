@@ -34,7 +34,9 @@ fun AppScreen() {
                             key = "city",
                             value = city
                         )
-                        navController.navigate(Screen.DisplayMapScreen.route)
+                        navController.navigate(Screen.DisplayMapScreen.route){
+                            launchSingleTop = true
+                        }
                     })
                 }
                 composable(
@@ -49,5 +51,6 @@ fun AppScreen() {
             }
         }
     }
+
 
 }

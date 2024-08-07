@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -30,29 +31,31 @@ fun MainScreen(
     val trie = remember { Trie.preprocessCities(cityList) }
     var displayedCities by remember { mutableStateOf(cityList) }
     var searchText by remember { mutableStateOf("") }
-    LazyColumn(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(4.dp)
-            .background(MaterialTheme.colorScheme.background)
-    ) {
-        item {
-            SearchBar(
-                searchText = searchText,
-                onSearchTextChange = { newText ->
-                    searchText = newText
-                    displayedCities = if (newText.isBlank()) {
-                        cityList
-                    } else {
-                        trie.searchPrefix(newText)
+    Scaffold { innerPadding ->
+        LazyColumn(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .background(MaterialTheme.colorScheme.background)
+        ) {
+            item {
+                SearchBar(
+                    searchText = searchText,
+                    onSearchTextChange = { newText ->
+                        searchText = newText
+                        displayedCities = if (newText.isBlank()) {
+                            cityList
+                        } else {
+                            trie.searchPrefix(newText)
+                        }
                     }
-                }
-            )
-        }
-        items(displayedCities) { city ->
-            CityItem(cityModel = city,
-                onItemClick = { onItemClicked(city) }
-            )
+                )
+            }
+            items(displayedCities) { city ->
+                CityItem(cityModel = city,
+                    onItemClick = { onItemClicked(city) }
+                )
+            }
         }
     }
 
